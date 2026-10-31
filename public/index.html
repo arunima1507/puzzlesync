@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PuzzleSync ✨</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
@@ -15,15 +16,24 @@
   <main class="cockpit">
     <header class="hud">
       <span class="brand">✨ PuzzleSync</span>
-      <span class="badge">booting…</span>
+      <div class="hud-right">
+        <span class="progress" id="progress">0 / 12 placed</span>
+        <button class="btn-ghost" id="resetBtn" title="Reshuffle">↻</button>
+      </div>
     </header>
 
-    <section class="stage">
-      <h1>Building something cute & clever…</h1>
-      <p class="sub">Real-time jigsaw for you and your friends. Coming online soon, bestie. 💜</p>
-      <div class="pill">v0.1 · foundation</div>
+    <section class="stage" id="stage">
+      <div class="board" id="board"></div>
     </section>
   </main>
+
+  <div class="overlay hidden" id="solvedOverlay">
+    <div class="overlay-card">
+      <h2>yay, you solved it! ✨</h2>
+      <p class="sub" id="solvedMeta">nice work, bestie 💜</p>
+      <button class="btn-primary" id="playAgainBtn">play again</button>
+    </div>
+  </div>
 
   <script src="client.js"></script>
 </body>
