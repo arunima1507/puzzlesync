@@ -1,0 +1,17 @@
+{
+  "name": "puzzlesync",
+  "version": "0.1.0",
+  "description": "A collaborative real-time jigsaw puzzle for friends.",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --watch server/server.js"
+  },
+  "keywords": ["puzzle", "multiplayer", "socket.io", "game"],
+  "author": "you",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  }
+}

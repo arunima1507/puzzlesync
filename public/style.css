@@ -1,0 +1,113 @@
+:root {
+  --bg-deep: #12081f;
+  --bg-panel: #412f5a;
+  --pink: #ff4fd8;
+  --lilac: #b06bff;
+  --mint: #7dffd4;
+  --cyan: #6ee7ff;
+  --text: #fbeaff;
+  --muted: #a99bc4;
+  --radius: 20px;
+  --glow-pink: 0 0 24px rgba(255, 79, 216, 0.35);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: var(--bg-deep);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+/* Layered gradient mesh background */
+.mesh-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(255, 79, 216, 0.18), transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(176, 107, 255, 0.20), transparent 45%),
+    radial-gradient(circle at 60% 40%, rgba(110, 231, 255, 0.08), transparent 50%),
+    var(--bg-deep);
+}
+
+.cockpit {
+  width: min(960px, 100%);
+  background: linear-gradient(180deg, rgba(30,15,51,0.9), rgba(30,15,51,0.75));
+  border: 1px solid rgba(176, 107, 255, 0.25);
+  border-radius: var(--radius);
+  box-shadow: var(--glow-pink), 0 24px 60px rgba(0,0,0,0.55);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(176, 107, 255, 0.2);
+  background: rgba(18, 8, 31, 0.6);
+}
+
+.brand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--text);
+  text-shadow: 0 0 12px rgba(255, 79, 216, 0.6);
+}
+
+.badge {
+  font-size: 0.8rem;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--pink), var(--lilac));
+  color: #12081f;
+  font-weight: 600;
+  box-shadow: var(--glow-pink);
+}
+
+.stage {
+  padding: 64px 28px;
+  text-align: center;
+}
+
+.stage h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  margin: 0 0 12px;
+  background: linear-gradient(135deg, var(--pink), var(--lilac), var(--cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sub {
+  color: var(--muted);
+  max-width: 520px;
+  margin: 0 auto 24px;
+  line-height: 1.6;
+}
+
+.pill {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(125, 255, 212, 0.4);
+  color: var(--mint);
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
