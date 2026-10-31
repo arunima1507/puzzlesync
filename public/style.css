@@ -137,3 +137,17 @@ body {
   background: linear-gradient(135deg, var(--pink), var(--lilac));
   color: white; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 15px;
 }
+
+#inviteBtn {
+  border-color: var(--pink);
+  color: var(--pink);
+}
+#inviteBtn:hover {
+  background: var(--pink);
+  color: white;
+}
+@media (max-width: 768px) {
+  .hud-right { gap: 6px; }
+  .hud-right .btn-ghost { padding: 4px 8px; font-size: 0.8rem; }
+  .brand { font-size: 0.9rem; }
+}
