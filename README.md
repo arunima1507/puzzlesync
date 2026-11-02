@@ -39,12 +39,12 @@ A collaborative, real-time multiplayer jigsaw puzzle built for the web. Open a l
 
 4. Open http://localhost:3000 in two different browser windows to test the multiplayer sync!
 
-☁️ Deployment
+## ☁️ Deployment
 This app is configured for one-click deployment to Render.
 Build Command: npm install
 Start Command: npm start
 
-🗺️ Roadmap
+## 🗺️ Roadmap
 ☑ v1.0: Core multiplayer, piece locking, sound, confetti.
 □ v2.0: Landing page lobby, difficulty levels (3x3, 5x5, 8x8), real image support.
 □ v3.0: True interlocking SVG jigsaw paths, user image uploads.
