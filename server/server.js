@@ -8,50 +8,73 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 const PORT = process.env.PORT || 3000;
-
-// Serve static files
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// Keep track of pieces in each room
-// rooms = { "roomId": { pieces: { "pieceId": {x, y, placed} } } }
+// rooms = { "roomId": { imageId, lockedPieces: Set, pieces: {}, playerCount: 0 } }
 const rooms = {};
 
 io.on('connection', (socket) => {
-  console.log('A user connected:', socket.id);
-
-  // 1. Join a room
   socket.on('joinRoom', (roomId) => {
     socket.join(roomId);
     socket.roomId = roomId;
 
-    // If room doesn't exist, create it
     if (!rooms[roomId]) {
-      rooms[roomId] = { pieces: {} };
+      rooms[roomId] = { 
+        imageId: 'puzzle1', 
+        lockedPieces: new Set(), 
+        pieces: {}, 
+        playerCount: 0 
+      };
     }
 
-    // Send the current puzzle state to the person joining
-    socket.emit('roomState', rooms[roomId].pieces);
-    console.log(`User ${socket.id} joined room: ${roomId}`);
+    rooms[roomId].playerCount++;
+    io.to(roomId).emit('playerCount', rooms[roomId].playerCount);
+
+    // Send current state to the new joiner
+    socket.emit('roomState', {
+      pieces: rooms[roomId].pieces,
+      imageId: rooms[roomId].imageId
+    });
   });
 
-  // 2. Receive a piece move and broadcast it
+  socket.on('changeImage', (imageId) => {
+    const roomId = socket.roomId;
+    if (!roomId || !rooms[roomId]) return;
+    rooms[roomId].imageId = imageId;
+    rooms[roomId].pieces = {}; // reset pieces
+    rooms[roomId].lockedPieces.clear();
+    io.to(roomId).emit('imageChanged', imageId);
+  });
+
   socket.on('pieceMoved', (data) => {
     const roomId = socket.roomId;
-    if (!roomId) return;
-
-    // Save state to server memory
+    if (!roomId || !rooms[roomId]) return;
     rooms[roomId].pieces[data.pieceId] = {
-      x: data.x,
-      y: data.y,
-      placed: data.placed
+      x: data.x, y: data.y, placed: data.placed, inTray: data.inTray, rawX: data.rawX, rawY: data.rawY
     };
-
-    // Send to everyone ELSE in the room
     socket.to(roomId).emit('pieceMoved', data);
   });
 
+  socket.on('lockPiece', (pieceId) => {
+    const roomId = socket.roomId;
+    if (!roomId || !rooms[roomId]) return;
+    rooms[roomId].lockedPieces.add(pieceId);
+    socket.to(roomId).emit('pieceLocked', pieceId);
+  });
+
+  socket.on('unlockPiece', (pieceId) => {
+    const roomId = socket.roomId;
+    if (!roomId || !rooms[roomId]) return;
+    rooms[roomId].lockedPieces.delete(pieceId);
+    socket.to(roomId).emit('pieceUnlocked', pieceId);
+  });
+
   socket.on('disconnect', () => {
-    console.log('User disconnected:', socket.id);
+    const roomId = socket.roomId;
+    if (roomId && rooms[roomId]) {
+      rooms[roomId].playerCount = Math.max(0, rooms[roomId].playerCount - 1);
+      io.to(roomId).emit('playerCount', rooms[roomId].playerCount);
+    }
   });
 });
 

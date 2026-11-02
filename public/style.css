@@ -16,7 +16,8 @@ html, body {
   margin: 0; padding: 0; height: 100dvh;
   background: var(--bg-deep); color: var(--text);
   font-family: 'Inter', system-ui, sans-serif;
-  overflow: hidden;
+  overflow: hidden; /* Prevents page scroll */
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -53,6 +54,9 @@ body {
 }
 .btn-ghost:hover { background: var(--lilac); color: white; }
 
+#inviteBtn { border-color: var(--pink); color: var(--pink); }
+#inviteBtn:hover { background: var(--pink); color: white; }
+
 /* --- Layout --- */
 .stage {
   display: flex; flex: 1; padding: 20px; gap: 20px; min-height: 0;
@@ -67,7 +71,8 @@ body {
   background-color: rgba(255,255,255,0.6);
   border: 3px dashed var(--lilac); border-radius: 12px;
   background-size: cover; background-position: center;
-  background-blend-mode: overlay; /* Makes the faint image look soft */
+  background-blend-mode: overlay;
+  touch-action: none; /* CRITICAL: Stops mobile browser from scrolling while dragging */
 }
 
 .tray-container {
@@ -83,10 +88,10 @@ body {
 
 .tray {
   position: relative; flex: 1; background: rgba(248, 246, 252, 0.8);
-  border-radius: 8px; overflow: hidden;
+  border-radius: 8px; overflow: hidden; touch-action: none;
 }
 
-/* --- TRUE JIGSAW PIECES (Clip-Path Magic) --- */
+/* --- TRUE JIGSAW PIECES --- */
 .piece {
   position: absolute;
   cursor: grab;
@@ -94,13 +99,15 @@ body {
   filter: drop-shadow(0 4px 6px rgba(59, 42, 92, 0.3));
   will-change: left, top, width, height;
   transition: filter 0.2s;
-  /* The polygon creates a square with a tab on the right and bottom, and a hole on the left and top */
+  /* Jigsaw clip-path */
   clip-path: polygon(
     0% 0%, 30% 0%, 35% -10%, 65% -10%, 70% 0%, 100% 0%,
     100% 30%, 110% 35%, 110% 65%, 100% 70%, 100% 100%,
     70% 100%, 65% 110%, 35% 110%, 30% 100%, 0% 100%,
     0% 70%, -10% 65%, -10% 35%, 0% 30%
   );
+  touch-action: none; /* CRITICAL for mobile */
+  user-select: none;  /* Prevents text selection highlight on mobile */
 }
 .piece:hover { filter: drop-shadow(0 8px 12px rgba(255, 133, 216, 0.7)); z-index: 50; }
 .piece.dragging { 
@@ -114,11 +121,26 @@ body {
 
 @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-/* Mobile tweaks */
+/* Mobile Layout */
 @media (max-width: 768px) {
-  .stage { flex-direction: column; padding: 10px; gap: 10px; }
-  .tray-container { width: 100%; height: 120px; padding: 8px; }
-  .tray-label { margin-bottom: 4px; }
+  body { padding: 8px; }
+  .cockpit { border-radius: 12px; max-height: 100dvh; }
+  .stage { 
+    flex-direction: column; 
+    padding: 8px; 
+    gap: 8px; 
+  }
+  .tray-container { 
+    width: 100%; 
+    height: 120px; 
+    padding: 8px; 
+  }
+  .tray-label { margin-bottom: 4px; font-size: 0.7rem; }
+  .hud { padding: 8px 12px; }
+  .hud-right { gap: 6px; }
+  .hud-right .btn-ghost { padding: 4px 8px; font-size: 0.75rem; }
+  .brand { font-size: 0.85rem; }
+  .progress { font-size: 0.75rem; padding: 4px 8px; }
 }
 
 /* --- Overlay --- */
@@ -138,16 +160,30 @@ body {
   color: white; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 15px;
 }
 
-#inviteBtn {
-  border-color: var(--pink);
-  color: var(--pink);
+/* --- Block 5 Additions --- */
+.hud-left { display: flex; align-items: center; gap: 12px; }
+.presence {
+  font-size: 0.75rem; font-weight: 600; color: var(--text);
+  background: rgba(110, 231, 183, 0.2); padding: 4px 8px; border-radius: 999px;
+  border: 1px solid var(--mint);
 }
-#inviteBtn:hover {
-  background: var(--pink);
-  color: white;
+select.btn-ghost { cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 600; outline: none; }
+select.btn-ghost option { color: var(--text); background: white; }
+
+#confettiCanvas {
+  position: fixed; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 9999;
 }
+
+/* Locked piece state (when friend is dragging it) */
+.piece.locked-by-other {
+  filter: drop-shadow(0 0 10px var(--pink));
+  cursor: not-allowed;
+}
+
+/* Mobile adjustments for header */
 @media (max-width: 768px) {
-  .hud-right { gap: 6px; }
-  .hud-right .btn-ghost { padding: 4px 8px; font-size: 0.8rem; }
-  .brand { font-size: 0.9rem; }
+  .hud-left { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .brand { font-size: 0.8rem; }
+  .presence { font-size: 0.6rem; padding: 2px 6px; }
 }

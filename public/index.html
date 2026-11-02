@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>PuzzleSync ✨</title>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
@@ -10,12 +10,21 @@
 </head>
 <body>
   <div class="mesh-bg" aria-hidden="true"></div>
+  <canvas id="confettiCanvas"></canvas>
 
   <main class="cockpit">
     <header class="hud">
-      <span class="brand">✨ PuzzleSync</span>
+      <div class="hud-left">
+        <span class="brand">✨ PuzzleSync</span>
+        <span class="presence" id="presence">🟢 1 here</span>
+      </div>
       <div class="hud-right">
-        <button class="btn-ghost" id="inviteBtn">🔗 Copy Invite</button>
+        <select id="imageSelect" class="btn-ghost" style="padding: 6px;">
+          <option value="puzzle1">Gradient</option>
+          <option value="puzzle2">Grid</option>
+          <option value="puzzle3">Fox</option>
+        </select>
+        <button class="btn-ghost" id="inviteBtn">🔗 Invite</button>
         <span class="progress" id="progress">0 / 12 placed</span>
         <button class="btn-ghost" id="resetBtn" title="Reshuffle">↻</button>
       </div>
@@ -40,7 +49,6 @@
     </div>
   </div>
 
-  <!-- Socket.io Client -->
   <script src="/socket.io/socket.io.js"></script>
   <script src="client.js"></script>
 </body>
