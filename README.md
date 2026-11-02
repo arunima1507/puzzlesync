@@ -45,6 +45,6 @@ Build Command: npm install
 Start Command: npm start
 
 ## 🗺️ Roadmap
-☑ v1.0: Core multiplayer, piece locking, sound, confetti.
-□ v2.0: Landing page lobby, difficulty levels (3x3, 5x5, 8x8), real image support.
-□ v3.0: True interlocking SVG jigsaw paths, user image uploads.
+[v] v1.0: Core multiplayer, piece locking, sound, confetti.
+[] v2.0: Landing page lobby, difficulty levels (3x3, 5x5, 8x8), real image support.
+[] v3.0: True interlocking SVG jigsaw paths, user image uploads.
